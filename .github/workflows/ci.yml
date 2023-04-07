@@ -45,10 +45,10 @@ jobs:
 
       - name: "Test instantiated project"
         run: |
-          SBT_TPOLECAT_CI=1 nix develop .#ci --command bash -c \
+          SBT_TPOLECAT_CI=1 nix develop .#ci --command bash -c "\
             set -euo pipefail; \
             cd target/g8/; \
-            sbt +test
+            sbt +test"
 
       - name: "Export Nix store cache"
         if: "steps.nix-cache.outputs.cache-hit != 'true'"
