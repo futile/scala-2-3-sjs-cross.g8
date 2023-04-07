@@ -40,8 +40,15 @@ jobs:
         if: "steps.nix-cache.outputs.cache-hit == 'true'"
         run: "nix copy --no-check-sigs --from /tmp/nixcache ./#devShells.x86_64-linux.base"
 
-      - name: "Run `sbt g8Test`"
-        run: "SBT_TPOLECAT_CI=1 nix develop --command sbt g8Test"
+      - name: "Instantiate template"
+        run: "nix develop .#base --command sbt g8"
+
+      - name: "Test instantiated project"
+        run: |
+          SBT_TPOLECAT_CI=1 nix develop .#base --command bash -c \
+            set -euo pipefail; \
+            cd target/g8/; \
+            sbt +test
 
       - name: "Export Nix store cache"
         if: "steps.nix-cache.outputs.cache-hit != 'true'"
