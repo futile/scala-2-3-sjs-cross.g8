@@ -1,0 +1,99 @@
+# based on https://github.com/fdietze/formidable/blob/main/.github/workflows/build.yml
+
+name: Apply and test template
+on:
+  push:
+    branches: ["main"]
+    tags: [ v* ]
+  pull_request:
+    types: [ opened, synchronize ]
+  workflow_dispatch:
+
+# automatically cancel previous runs on the same PR
+# https://stackoverflow.com/questions/66335225/how-to-cancel-previous-runs-in-the-pr-when-you-push-new-commitsupdate-the-curre/67939898#67939898
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: coursier/cache-action@v6
+
+      # based on https://github.com/cachix/install-nix-action/issues/56#issuecomment-1300421537
+      - name: "Cache Nix store"
+        uses: actions/cache@v3.0.8
+        id: nix-cache
+        with:
+          path: /tmp/nixcache
+          key: "nix-deps-${{ hashFiles('flake.nix', 'flake.lock') }}"
+
+      - name: "Install Nix"
+        uses: cachix/install-nix-action@v19
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Import Nix store cache"
+        if: "steps.nix-cache.outputs.cache-hit == 'true'"
+        run: "nix copy --from /tmp/nixcache ./#devShells.x86_64-linux.base"
+
+      - name: "Run `sbt g8Test`"
+        run: "SBT_TPOLECAT_CI=1 nix develop --command sbt g8Test"
+
+      - name: "Export Nix store cache"
+        if: "steps.nix-cache.outputs.cache-hit != 'true'"
+        run: "nix copy --to /tmp/nixcache ./#devShells.x86_64-linux.base"
+
+      - name: Check if working directory is clean
+        run: git diff --quiet --exit-code || (git status && false)
+
+      # - name: Deploy to Github Pages
+      #   if: github.ref == 'refs/heads/main' && startsWith(matrix.scalaVersion, '2.13')
+      #   uses: JamesIves/github-pages-deploy-action@v4.4.1
+      #   with:
+      #     branch: gh-pages # The branch the action should deploy to.
+      #     folder: demo/target/scala-2.13/scalajs-bundler/main/dist # The folder the action should deploy.
+
+      # - name: Debug over SSH (tmate)
+      #   # if: ${{ failure() }}
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     limit-access-to-actor: true
+
+  # not publishing for now, but keeping this for reference
+  # publish:
+  #   needs: [build]
+  #   # if this is not a pull request, run only on main or tags pushes.
+  #   # if this is a pull request, run only when 'publish' label is set
+  #   if: (github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))) ||
+  #     (github.event_name == 'pull_request' &&  contains(github.event.pull_request.labels.*.name, 'publish'))
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.event.pull_request.head.sha }}
+  #         fetch-depth: 0 # full history with tags
+
+  #     - uses: coursier/cache-action@v6
+  #     - uses: coursier/setup-action@v1
+  #       with:
+  #         jvm: adoptium:1.17
+  #         apps: sbt
+
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16'
+  #         cache: 'yarn'
+  #         cache-dependency-path: formidable/package.json
+
+  #     - uses: olafurpg/setup-gpg@v3
+  #     - name: Publish
+  #       run: ENABLE_FATAL_WARNINGS=true SBT_OPTS="-XX:MaxHeapSize=6G" sbt version "git status" ci-release "git status"
+  #       env:
+  #         PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+  #         PGP_SECRET: ${{ secrets.PGP_SECRET }}
+  #         SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+  #         SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
