@@ -1,6 +1,6 @@
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-// meta-information
+// meta- & publish-information
 inThisBuild(
   List(
     organization := "$organization$",
@@ -16,7 +16,8 @@ inThisBuild(
         "your@email.address",
         url("https://github.com/<your-gh-username>")
       )
-    )
+    ),
+    version := "0.1.0-SNAPSHOT"
   )
 )
 
@@ -31,6 +32,14 @@ inThisBuild(
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 )
+
+// manual aggregation project to prevent publishing
+lazy val root = (project in file("."))
+  .aggregate($package_name$.js, $package_name$.jvm)
+  .settings(
+    publish := {},
+    publishLocal := {}
+  )
 
 lazy val $package_name$ =
   crossProject(
