@@ -21,6 +21,9 @@
           human-dev =
             pkgs.mkShellNoCC { nativeBuildInputs = (base-pkgs ++ human-pkgs); }
             // {
+              # https://github.com/typelevel/sbt-tpolecat
+              SBT_TPOLECAT_DEV=1;
+
               name =
                 "Base environment with additional tools for human developers";
             };
