@@ -1,0 +1,17 @@
+# bloop and metals
+.bsp
+.bloop
+
+# direnv/envrc
+.direnv
+
+# metals
+.metals
+metals.sbt
+
+# sbt & g8
+target/
+boot/
+lib_managed/
+src_managed/
+project/plugins/project/
