@@ -10,7 +10,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs-stable.legacyPackages.${system};
-        base-pkgs = with pkgs; [ sbt just ];
+        base-pkgs = with pkgs; [ sbt just nodejs ];
         human-pkgs = with pkgs; [ ];
       in {
         devShells = rec {
