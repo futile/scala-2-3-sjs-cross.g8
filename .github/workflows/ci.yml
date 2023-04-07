@@ -38,14 +38,14 @@ jobs:
 
       - name: "Import Nix store cache"
         if: "steps.nix-cache.outputs.cache-hit == 'true'"
-        run: "nix copy --from /tmp/nixcache ./#devShells.x86_64-linux.base"
+        run: "nix copy --no-check-sigs --from /tmp/nixcache ./#devShells.x86_64-linux.base"
 
       - name: "Run `sbt g8Test`"
         run: "SBT_TPOLECAT_CI=1 nix develop --command sbt g8Test"
 
       - name: "Export Nix store cache"
         if: "steps.nix-cache.outputs.cache-hit != 'true'"
-        run: "nix copy --to /tmp/nixcache ./#devShells.x86_64-linux.base"
+        run: "nix copy --no-check-sigs --to /tmp/nixcache ./#devShells.x86_64-linux.base"
 
       - name: Check if working directory is clean
         run: git diff --quiet --exit-code || (git status && false)
