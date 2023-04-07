@@ -7,5 +7,9 @@ object StubSpec extends TestSuite {
     test("helloWorld works") {
       assert(Stub.helloWorld == "Hello, World!")
     }
+
+    test("answerToEverything works") {
+      assert(StubMacros.answerToEverything == 42)
+    }
   }
 }

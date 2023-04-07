@@ -1,3 +1,4 @@
+// auto-reload when this `build.sbt` changes
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 // meta- & publish-information
@@ -53,7 +54,14 @@ lazy val $package_name$ =
       name := "$package_name$",
       libraryDependencies ++= Seq(
         "com.lihaoyi" %%% "utest" % "0.8.1" % "test"
-      )
+      ) ++
+        (CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, 13)) =>
+            Seq(
+              "org.scala-lang" % "scala-reflect" % scalaVersion.value
+            )
+          case _ => Seq.empty
+        })
     )
     .jsSettings() // ScalaJs-specific settings
     .jvmSettings() // ScalaJvm-specific settings
