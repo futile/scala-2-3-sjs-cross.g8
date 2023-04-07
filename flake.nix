@@ -12,10 +12,18 @@
         pkgs = nixpkgs-stable.legacyPackages.${system};
         base-pkgs = with pkgs; [ sbt just nodejs ];
         human-pkgs = with pkgs; [ ];
+        ci-pkgs = with pkgs; [ bash ];
       in {
         devShells = rec {
           base = pkgs.mkShellNoCC { nativeBuildInputs = base-pkgs; } // {
             name = "Base environment to build and run tests";
+          };
+
+          ci = pkgs.mkShellNoCC {
+            SBT_TPOLECAT_CI = 1;
+            nativeBuildInputs = (base-pkgs ++ ci-pkgs);
+          } // {
+            name = "Environment for running CI";
           };
 
           human-dev =

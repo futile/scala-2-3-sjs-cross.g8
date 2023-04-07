@@ -38,21 +38,21 @@ jobs:
 
       - name: "Import Nix store cache"
         if: "steps.nix-cache.outputs.cache-hit == 'true'"
-        run: "nix copy --no-check-sigs --from /tmp/nixcache ./#devShells.x86_64-linux.base"
+        run: "nix copy --no-check-sigs --from /tmp/nixcache ./#devShells.x86_64-linux.ci"
 
       - name: "Instantiate template"
-        run: "nix develop .#base --command sbt g8"
+        run: "nix develop .#ci --command sbt g8"
 
       - name: "Test instantiated project"
         run: |
-          SBT_TPOLECAT_CI=1 nix develop .#base --command bash -c \
+          SBT_TPOLECAT_CI=1 nix develop .#ci --command bash -c \
             set -euo pipefail; \
             cd target/g8/; \
             sbt +test
 
       - name: "Export Nix store cache"
         if: "steps.nix-cache.outputs.cache-hit != 'true'"
-        run: "nix copy --no-check-sigs --to /tmp/nixcache ./#devShells.x86_64-linux.base"
+        run: "nix copy --no-check-sigs --to /tmp/nixcache ./#devShells.x86_64-linux.ci"
 
       - name: Check if working directory is clean
         run: git diff --quiet --exit-code || (git status && false)
