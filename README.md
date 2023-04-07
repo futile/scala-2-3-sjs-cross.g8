@@ -1,5 +1,13 @@
 A [Giter8][g8] template for a Scala sbt-project with Scala-2 and -3 cross-compilation, as well as Scala.js and ScalaJvm cross-compilation.
 
+## Usage
+
+To create a project based on this template, run:
+
+``` shellsession
+$ sbt new futile/scala-2-3-sjs-cross.g8
+```
+
 ## Features
 
 The created project provides the following features:
@@ -25,7 +33,7 @@ Note: This will only execute the sbt-command `+test`, and not run all the comman
 
 Template license
 ----------------
-Written in 2023 by 'Felix Rath', felixm.rath@gmail.com
+Written in 2023 by Felix Rath, felixm.rath@gmail.com
 
 To the extent possible under law, the author(s) have dedicated all copyright and related
 and neighboring rights to this template to the public domain worldwide.
