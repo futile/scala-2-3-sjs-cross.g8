@@ -1,5 +1,5 @@
 {
-  description = "Flake to develop this project";
+  description = "Nix-flake to develop this project";
 
   inputs = {
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
@@ -9,8 +9,8 @@
   outputs = { self, nixpkgs-stable, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs-stable.legacyPackages.${system};
-        base-pkgs = with pkgs; [ sbt just ];
+        pkgs = nixpkgs-stable.legacyPackages.\${system};
+        base-pkgs = with pkgs; [ sbt node yarn ];
         human-pkgs = with pkgs; [ ];
       in {
         devShells = rec {

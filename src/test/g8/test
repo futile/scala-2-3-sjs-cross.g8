@@ -1,0 +1,8 @@
+# Script tests using https://www.scala-sbt.org/1.x/docs/Testing-sbt-plugins.html
+
+# Basic info:
+# `>` sends a command to sbt
+# `+` runs the command for all `crossScalaVersions`
+
+# run tests for all scala versions
+> +test
