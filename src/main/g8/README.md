@@ -10,7 +10,7 @@ See https://zero-to-nix.com for a gentle and guided introduction to using `nix`.
 To enter the development environment with `nix`:
 
 ``` shellsession
-$ nix flake develop
+\$ nix flake develop
 ```
 
 ## License

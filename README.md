@@ -1,4 +1,14 @@
-A [Giter8][g8] template for a scala sbt-project with scala2 and -3 cross-compilation, including macros, and support for scalajs.
+A [Giter8][g8] template for a scala sbt-project with scala2 and -3 cross-compilation, as well as Scala.js and ScalaJvm cross-compilation.
+
+## Features
+
+The created project provides the following features:
+
+* Scala-2 and -3 cross compilation based on https://docs.scala-lang.org/scala3/guides/migration/tutorial-macro-cross-building.html
+* Scala.js and ScalaJvm cross-compilation using https://github.com/portable-scala/sbt-crossproject
+* Unit-testing with [utest](https://github.com/com-lihaoyi/utest)
+* Improved defaults for sbt through [sbt-tpolecat](https://github.com/typelevel/sbt-tpolecat)
+* An example project to demonstrate the file structure and capabilities
 
 ### Quick Tests
 

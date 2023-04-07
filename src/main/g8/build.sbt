@@ -25,8 +25,6 @@ inThisBuild(
 val scala2Version = "$scala2_version$"
 val scala3Version = "$scala3_version$"
 
-// For information on scala-2 and -3 cross-building see: https://docs.scala-lang.org/scala3/guides/migration/tutorial-macro-cross-building.html
-
 inThisBuild(
   Seq(
     crossScalaVersions := Seq(scala2Version, scala3Version),
@@ -39,11 +37,10 @@ inThisBuild(
 lazy val root = (project in file("."))
   .aggregate($package_name$.js, $package_name$.jvm)
   .settings(
-    publish := {},
-    publishLocal := {}
+    crossScalaVersions := Nil,
+    publish / skip := true,
+    publishLocal / skip := true
   )
-
-// For information on JVM&JS cross-building see: https://github.com/portable-scala/sbt-crossproject
 
 lazy val $package_name$ =
   crossProject(
