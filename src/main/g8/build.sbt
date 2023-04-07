@@ -32,11 +32,16 @@ inThisBuild(
   )
 )
 
-lazy val $package_name$ = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
-  .settings(
-    name := "$package_name$",
-    libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "utest" % "0.8.1" % "test"
-    )
+lazy val $package_name$ =
+  crossProject(
+    JSPlatform,
+    JVMPlatform
+    /*, NativePlatform */ // `NativePlatform` might work, haven't tested too much
   )
+    .crossType(CrossType.Pure)
+    .settings(
+      name := "$package_name$",
+      libraryDependencies ++= Seq(
+        "com.lihaoyi" %%% "utest" % "0.8.1" % "test"
+      )
+    )
