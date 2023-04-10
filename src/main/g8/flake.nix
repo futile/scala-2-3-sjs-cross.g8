@@ -11,6 +11,7 @@
       let
         pkgs = nixpkgs-stable.legacyPackages.\${system};
         base-pkgs = with pkgs; [ sbt nodejs yarn ];
+        ci-pkgs = with pkgs; [  ];
         human-pkgs = with pkgs; [ ];
       in {
         devShells = rec {
@@ -18,14 +19,24 @@
             name = "Base environment to build and run tests";
           };
 
+          ci = pkgs.mkShellNoCC {
+            # https://github.com/typelevel/sbt-tpolecat
+            SBT_TPOLECAT_CI=1;
+
+            nativeBuildInputs = (base-pkgs ++ ci-pkgs);
+          } // {
+            name = "Environment for CI";
+          };
+
           human-dev =
-            pkgs.mkShellNoCC { nativeBuildInputs = (base-pkgs ++ human-pkgs); }
-            // {
+            pkgs.mkShellNoCC {
               # https://github.com/typelevel/sbt-tpolecat
               SBT_TPOLECAT_DEV=1;
 
+              nativeBuildInputs = (base-pkgs ++ human-pkgs);
+            } // {
               name =
-                "Base environment with additional tools for human developers";
+                "Environment with additional tools for human developers";
             };
 
           default = human-dev;

@@ -61,6 +61,12 @@ lazy val $package_name$ =
               "org.scala-lang" % "scala-reflect" % scalaVersion.value
             )
           case _ => Seq.empty
+        }),
+      scalacOptions ++=
+        (CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, 13)) =>
+            Seq("-Ymacro-annotations")
+          case _ => Seq.empty
         })
     )
     .jsSettings() // ScalaJs-specific settings
