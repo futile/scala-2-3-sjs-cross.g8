@@ -8,6 +8,8 @@ To create a project based on this template, run:
 $ sbt new futile/scala-2-3-sjs-cross.g8
 ```
 
+Afterwards, check out the generated directory layout (also see below), and the generated `build.sbt`, which contains some additional meta-information to configure.
+
 ## Features
 
 The created project provides the following features:
@@ -16,7 +18,68 @@ The created project provides the following features:
 * Scala.js and ScalaJvm cross-compilation using https://github.com/portable-scala/sbt-crossproject
 * Unit-testing with [utest](https://github.com/com-lihaoyi/utest)
 * Improved defaults for sbt through [sbt-tpolecat](https://github.com/typelevel/sbt-tpolecat)
+* A replicable and shared development environment through [nix](https://nixos.org)
 * An example project that implements a macro in Scala-2 and scala-3
+
+
+## Template Properties and Layout
+
+These are (at the time of writing) the [properties configurable when instantiating the template](src/main/g8/default.properties):
+
+```
+name=new-folder-name
+organization=com.github.your_username
+package_name=exampackage
+scala2_version=2.13.10
+scala3_version=3.2.2
+StubObjectName=Stub
+```
+
+### Created Layout
+
+The layout created by the template looks like this:
+
+```
+$new-folder-name$
+├── $package_name$
+│  └── src
+│     ├── main
+│     │  ├── scala
+│     │  │  └── $package_name$
+│     │  │     └── $StubObjectName$.scala
+│     │  ├── scala-2
+│     │  │  └── $package_name$
+│     │  │     └── $StubObjectName$Macros-Scala2.scala
+│     │  └── scala-3
+│     │     └── $package_name$
+│     │        └── $StubObjectName$Macros-Scala3.scala
+│     └── test
+│        └── scala
+│           └── $package_name$
+│              └── $StubObjectName$Spec.scala
+├── .gitignore
+├── build.sbt
+├── flake.nix
+├── project
+│  ├── build.properties
+│  └── plugins.sbt
+└── README.md
+```
+
+## Development
+
+Some notes for developing this project:
+
+### Dev-Environment
+
+It is recommended to use [`nix`](https://nixos.org) for development, as it provides all the required dependencies, and in the same version as used by CI.
+See https://zero-to-nix.com for a gentle and guided introduction to using `nix`.
+
+To enter the development environment with `nix`:
+
+``` shellsession
+\$ nix flake develop
+```
 
 ### Quick Tests
 
