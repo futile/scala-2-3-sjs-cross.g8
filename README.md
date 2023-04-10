@@ -1,4 +1,5 @@
 A [Giter8][g8] template for a Scala sbt-project with Scala-2 and -3 cross-compilation, as well as Scala.js and ScalaJvm cross-compilation.
+This is a useful starting point for libraries, especially for macro-libraries, as these should usually work, and be useful, cross-platform and -version.
 
 ## Usage
 
