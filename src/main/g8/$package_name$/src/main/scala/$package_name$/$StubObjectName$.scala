@@ -1,5 +1,5 @@
 package $package_name$
 
-object Stub {
+object $StubObjectName$ {
   val helloWorld = "Hello, World!"
 }
