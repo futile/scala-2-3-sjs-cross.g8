@@ -19,8 +19,8 @@ The created project provides the following features:
 * Scala.js and ScalaJvm cross-compilation using https://github.com/portable-scala/sbt-crossproject
 * Unit-testing with [utest](https://github.com/com-lihaoyi/utest)
 * Improved defaults for sbt through [sbt-tpolecat](https://github.com/typelevel/sbt-tpolecat)
-* A replicable and shared development environment through [nix](https://nixos.org)
-* An example project that implements a macro in Scala-2 and scala-3
+* A replicable and shared development environment through [`nix`][nix]
+* An example project that implements a macro in Scala-2 and Scala-3
 
 
 ## Template Properties and Layout
@@ -73,22 +73,22 @@ Some notes for developing this project:
 
 ### Dev-Environment
 
-It is recommended to use [`nix`](https://nixos.org) for development, as it provides all the required dependencies, and in the same version as used by CI.
+It is recommended to use [`nix`][nix] for development, as it provides all the required dependencies, and in the same version as used by CI.
 See https://zero-to-nix.com for a gentle and guided introduction to using `nix`.
 
 To enter the development environment with `nix`:
 
 ``` shellsession
-\$ nix flake develop
+$ nix flake develop
 ```
 
 ### Quick Tests
 
-Running `g8Test` inside can be slow, but there is a simple way to speed up the process.
-Instead, inside `sbt` run:
+Running `g8Test` inside `sbt` can be slow, but there is a simple way to speed up the process.
+Instead, inside `sbt` run (requires [just](https://just.systems), including in the nix-environment):
 
 ```
-~; g8; eval {import scala.sys.process._; "cd target/g8/ && sbt +test" !}
+~; g8; eval {import scala.sys.process._; "just test-quick" !}
 ```
 
 This should be almost ~2x faster than `g8Test`.
@@ -104,3 +104,4 @@ and neighboring rights to this template to the public domain worldwide.
 This template is distributed without any warranty. See file `LICENSE` and <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 [g8]: http://www.foundweekends.org/giter8/
+[nix]: https://nixos.org
