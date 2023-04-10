@@ -12,7 +12,7 @@
         pkgs = nixpkgs-stable.legacyPackages.${system};
         base-pkgs = with pkgs; [ sbt just nodejs ];
         human-pkgs = with pkgs; [ ];
-        ci-pkgs = with pkgs; [ bash ];
+        ci-pkgs = with pkgs; [ bashInteractive ];
       in {
         devShells = rec {
           base = pkgs.mkShellNoCC { nativeBuildInputs = base-pkgs; } // {
