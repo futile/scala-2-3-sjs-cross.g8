@@ -1,0 +1,14 @@
+# bsp & bloop
+.bsp
+.bloop
+
+# direnv/envrc
+.direnv
+
+# metals
+.metals
+metals.sbt
+
+# sbt
+target/
+project/plugins/project/
